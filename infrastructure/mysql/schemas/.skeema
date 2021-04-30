@@ -1,0 +1,9 @@
+default-character-set=utf8mb4
+default-collation=utf8mb4_bin
+schema=cooking_bomb
+
+[local]
+flavor=mysql:8.0
+host=127.0.0.1
+port=13306
+user=root
