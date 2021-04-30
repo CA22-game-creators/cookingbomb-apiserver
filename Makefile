@@ -8,6 +8,6 @@ run:
 re-run:
 	$(ENV_LOCAL) docker-compose up --build
 
-.PHONY: migration
-migration:
+.PHONY: migrate
+migrate:
 	$(ENV_LOCAL) sh ./infrastructure/mysql/schemas/migrator.sh
