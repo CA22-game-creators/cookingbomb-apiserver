@@ -13,3 +13,10 @@ Docker を[ここ](https://www.docker.com/get-started)からインストール
 ```
 $ make run
 ```
+
+## CLI で用いる Go ライブラリ
+
+### Skeema
+
+- マイグレーションツール
+- [インストール](https://www.skeema.io/download/)
