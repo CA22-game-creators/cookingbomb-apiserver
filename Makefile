@@ -8,6 +8,10 @@ run:
 re-run:
 	$(ENV_LOCAL) docker-compose up --build
 
+.PHONY: migrate
+migrate:
+	$(ENV_LOCAL) sh ./infrastructure/mysql/schemas/migrator.sh
+
 .PHONY: lint
 lint:
 	go mod tidy
