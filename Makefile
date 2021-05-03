@@ -11,3 +11,8 @@ re-run:
 .PHONY: migrate
 migrate:
 	$(ENV_LOCAL) sh ./infrastructure/mysql/schemas/migrator.sh
+
+.PHONY: lint
+lint:
+	go mod tidy
+	golangci-lint run --enable=golint,gosec,prealloc,gocognit
