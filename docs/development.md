@@ -20,3 +20,8 @@ $ make run
 
 - マイグレーションツール
 - [インストール](https://www.skeema.io/download/)
+
+### golangci-lint
+
+- Go の Linter 詰め合わせ
+- [インストール](https://golangci-lint.run/usage/install/#local-installation)
