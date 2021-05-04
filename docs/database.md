@@ -19,7 +19,7 @@ migration ツールには[skeema](https://github.com/skeema/skeema)を採用し�
 $ skeema diff local -p${MYSQL_ROOT_PASSWORD}
 ```
 
-- コードを DB に反映する
+- コードを DB に反映する(破壊的なら`--allow-unsafe`を付ける)
 
 ```
 $ skeema push local -p${MYSQL_ROOT_PASSWORD}
