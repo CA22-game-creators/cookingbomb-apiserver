@@ -1,5 +1,6 @@
 # cookingbomb-server
 
-## 環境構築
+## 各種ドキュメント
 
-https://github.com/CA22-game-creators/cookingbomb-apiserver/blob/main/docs/development.md
+- [環境構築について](https://github.com/CA22-game-creators/cookingbomb-apiserver/blob/main/docs/development.md)
+- [スキーマ管理について](https://github.com/CA22-game-creators/cookingbomb-apiserver/blob/main/docs/database.md)
