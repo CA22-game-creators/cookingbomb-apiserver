@@ -1,4 +1,4 @@
-# cookingbomb-server
+# cookingbomb-apiserver
 
 ## 各種ドキュメント
 
