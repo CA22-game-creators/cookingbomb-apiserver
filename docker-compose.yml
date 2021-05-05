@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./docker/app/local/Dockerfile
     volumes:
-      - ./:/go/src/github.com/CA22-game-creators/cookingbomb-server
+      - ./:/go/src/github.com/CA22-game-creators/cookingbomb-apiserver
     restart: always
     tty: true
     ports:
