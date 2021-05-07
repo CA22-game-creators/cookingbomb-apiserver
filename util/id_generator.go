@@ -15,7 +15,7 @@ type IDGenerator interface {
 }
 
 func NewIDGenerator() IDGenerator {
-	return &idGenerator{}
+	return idGenerator{}
 }
 
 func (idGenerator) Generate() (ulid.ULID, error) {

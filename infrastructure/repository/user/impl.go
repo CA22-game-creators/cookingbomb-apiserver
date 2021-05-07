@@ -12,7 +12,7 @@ type repository struct {
 }
 
 func NewRepository(db *gorm.DB) domain.Repository {
-	return &repository{
+	return repository{
 		db: db,
 	}
 }

@@ -12,7 +12,7 @@ type TokenGenerator interface {
 }
 
 func NewTokenGenerator() TokenGenerator {
-	return &tokenGenerator{}
+	return tokenGenerator{}
 }
 
 func (tokenGenerator) Generate() (uuid.UUID, error) {

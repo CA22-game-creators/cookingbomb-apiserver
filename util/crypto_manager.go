@@ -12,7 +12,7 @@ type CryptoManager interface {
 }
 
 func NewCryptManager() CryptoManager {
-	return &cryptoManager{}
+	return cryptoManager{}
 }
 
 func (cryptoManager) Encrypt(v string) ([]byte, error) {

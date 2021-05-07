@@ -10,7 +10,7 @@ type interactor struct {
 }
 
 func New(f domain.Factory, r domain.Repository) InputPort {
-	return &interactor{
+	return interactor{
 		factory:    f,
 		repository: r,
 	}

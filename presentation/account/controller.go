@@ -14,7 +14,7 @@ type controller struct {
 }
 
 func New(s signupApplication.InputPort) pb.AccountServicesServer {
-	return &controller{
+	return controller{
 		signupApplication: s,
 	}
 }

@@ -18,7 +18,7 @@ type Factory interface {
 }
 
 func NewFactory(i util.IDGenerator, t util.TokenGenerator, c util.CryptoManager) Factory {
-	return &factory{
+	return factory{
 		idGenerator:    i,
 		tokenGenerator: t,
 		cryptoManager:  c,
