@@ -16,3 +16,11 @@ migrate:
 lint:
 	go mod tidy
 	golangci-lint run --enable=golint,gosec,prealloc,gocognit
+
+.PHONY: test
+test:
+	$(ENV_LOCAL) go test ./test/... -count=1
+
+.PHONY: generate
+generate:
+	go generate ./...
