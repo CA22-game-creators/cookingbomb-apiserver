@@ -1,0 +1,17 @@
+@startuml ドメインモデル図
+skinparam PackageStyle rectangle
+
+package ユーザー集約 {
+    object ユーザー {
+        ID
+        名前
+        ハッシュ済み認証トークン
+    }
+}
+note right of ユーザー
+    * ユーザー名は1文字以上10文字以下である必要がある
+    * 認証トークンはセッショントークンの生成に用いる
+end note
+
+
+@enduml
