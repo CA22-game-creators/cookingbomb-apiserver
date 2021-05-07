@@ -1,6 +1,7 @@
 package user_test
 
 import (
+	"errors"
 	"fmt"
 	"testing"
 
@@ -26,6 +27,12 @@ func TestNewName(t *testing.T) {
 			input:     tdString.Name.Valid,
 			expected1: tdDomain.Name,
 			expected2: nil,
+		},
+		{
+			title:     "【異常系】ユーザー名がUTF-8でエンコードされた文字列ではない",
+			input:     tdString.Name.Invalid,
+			expected1: "",
+			expected2: errors.New("user name string is invalid"),
 		},
 		{
 			title:     "【異常系】ユーザー名が長すぎる",

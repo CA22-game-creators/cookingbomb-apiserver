@@ -7,9 +7,10 @@ import (
 )
 
 var Name = struct {
-	Valid, TooShort, TooLong string
+	Valid, Invalid, TooShort, TooLong string
 }{
 	Valid:    "name",
+	Invalid:  string([]byte{0xff, 0xfe, 0xfd}),
 	TooShort: strings.Repeat("a", user.NameMinLen-1),
 	TooLong:  strings.Repeat("a", user.NameMaxLen+1),
 }
