@@ -1,0 +1,9 @@
+@startuml ユースケース図
+left to right direction
+
+actor ユーザーアカウント
+rectangle {
+    ユーザーアカウント -- (登録する)
+}
+
+@enduml
