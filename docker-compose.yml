@@ -4,6 +4,14 @@ services:
     build:
       context: .
       dockerfile: ./docker/app/local/Dockerfile
+    environment:
+      - ENV
+      - PORT
+      - MYSQL_PORT
+      - MYSQL_HOST
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
     volumes:
       - ./:/go/src/github.com/CA22-game-creators/cookingbomb-apiserver
     restart: always
