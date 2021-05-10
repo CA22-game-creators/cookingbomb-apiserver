@@ -1,13 +1,13 @@
 package user_test
 
 import (
-	"errors"
 	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	"github.com/CA22-game-creators/cookingbomb-apiserver/domain/model/user"
+	"github.com/CA22-game-creators/cookingbomb-apiserver/errors"
 
 	tdDomain "github.com/CA22-game-creators/cookingbomb-apiserver/test/testdata/domain/user"
 	tdString "github.com/CA22-game-creators/cookingbomb-apiserver/test/testdata/string/user"
@@ -32,21 +32,23 @@ func TestNewName(t *testing.T) {
 			title:     "【異常系】ユーザー名がUTF-8でエンコードされた文字列ではない",
 			input:     tdString.Name.Invalid,
 			expected1: "",
-			expected2: errors.New("user name string is invalid"),
+			expected2: errors.InvalidArgument("user name string is invalid"),
 		},
 		{
 			title:     "【異常系】ユーザー名が長すぎる",
 			input:     tdString.Name.TooLong,
 			expected1: "",
-			expected2: fmt.Errorf(
-				"user name should be %d to %d characters", user.NameMinLen, user.NameMaxLen),
+			expected2: errors.InvalidArgument(
+				fmt.Sprintf("user name should be %d to %d characters", user.NameMinLen, user.NameMaxLen),
+			),
 		},
 		{
 			title:     "【異常系】ユーザー名が短すぎる",
 			input:     tdString.Name.TooShort,
 			expected1: "",
-			expected2: fmt.Errorf(
-				"user name should be %d to %d characters", user.NameMinLen, user.NameMaxLen),
+			expected2: errors.InvalidArgument(
+				fmt.Sprintf("user name should be %d to %d characters", user.NameMinLen, user.NameMaxLen),
+			),
 		},
 	}
 
