@@ -3,6 +3,8 @@ package util
 
 import (
 	"github.com/google/uuid"
+
+	"github.com/CA22-game-creators/cookingbomb-apiserver/errors"
 )
 
 type tokenGenerator struct{}
@@ -16,5 +18,6 @@ func NewTokenGenerator() TokenGenerator {
 }
 
 func (tokenGenerator) Generate() (uuid.UUID, error) {
-	return uuid.NewRandom()
+	token, err := uuid.NewRandom()
+	return token, errors.Internal(err.Error())
 }

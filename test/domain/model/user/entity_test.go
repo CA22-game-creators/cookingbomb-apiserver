@@ -1,12 +1,12 @@
 package user_test
 
 import (
-	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	"github.com/CA22-game-creators/cookingbomb-apiserver/domain/model/user"
+	"github.com/CA22-game-creators/cookingbomb-apiserver/errors"
 
 	tdDomain "github.com/CA22-game-creators/cookingbomb-apiserver/test/testdata/domain/user"
 )
@@ -36,7 +36,7 @@ func TestNew(t *testing.T) {
 			input2:    tdDomain.Name,
 			input3:    tdDomain.HashedAuthToken,
 			expected1: user.User{},
-			expected2: errors.New("user id is nil"),
+			expected2: errors.Internal("user id is nil"),
 		},
 		{
 			title:     "【異常系】ユーザーアカウント名がzero値",
@@ -44,7 +44,7 @@ func TestNew(t *testing.T) {
 			input2:    "",
 			input3:    tdDomain.HashedAuthToken,
 			expected1: user.User{},
-			expected2: errors.New("user name is nil"),
+			expected2: errors.Internal("user name is nil"),
 		},
 		{
 			title:     "【異常系】認証トークンハッシュ値がzero値",
@@ -52,7 +52,7 @@ func TestNew(t *testing.T) {
 			input2:    tdDomain.Name,
 			input3:    nil,
 			expected1: user.User{},
-			expected2: errors.New("user hashed_auth_token is nil"),
+			expected2: errors.Internal("user hashed_auth_token is nil"),
 		},
 	}
 
