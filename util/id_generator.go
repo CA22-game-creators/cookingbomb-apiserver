@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/oklog/ulid/v2"
+
+	"github.com/CA22-game-creators/cookingbomb-apiserver/errors"
 )
 
 type idGenerator struct{}
@@ -19,6 +21,6 @@ func NewIDGenerator() IDGenerator {
 }
 
 func (idGenerator) Generate() (ulid.ULID, error) {
-	t := time.Unix(1000000, 0)
-	return ulid.New(ulid.Timestamp(t), rand.Reader)
+	id, err := ulid.New(ulid.Timestamp(time.Unix(1000000, 0)), rand.Reader)
+	return id, errors.Internal(err.Error())
 }

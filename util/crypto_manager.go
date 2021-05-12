@@ -2,6 +2,7 @@
 package util
 
 import (
+	"github.com/CA22-game-creators/cookingbomb-apiserver/errors"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -16,5 +17,6 @@ func NewCryptManager() CryptoManager {
 }
 
 func (cryptoManager) Encrypt(v string) ([]byte, error) {
-	return bcrypt.GenerateFromPassword([]byte(v), bcrypt.DefaultCost)
+	hash, err := bcrypt.GenerateFromPassword([]byte(v), bcrypt.DefaultCost)
+	return hash, errors.Internal(err.Error())
 }

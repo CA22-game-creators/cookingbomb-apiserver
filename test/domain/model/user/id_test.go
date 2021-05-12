@@ -1,13 +1,13 @@
 package user_test
 
 import (
-	"errors"
 	"testing"
 
 	"github.com/oklog/ulid/v2"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/CA22-game-creators/cookingbomb-apiserver/domain/model/user"
+	"github.com/CA22-game-creators/cookingbomb-apiserver/errors"
 
 	tdDomain "github.com/CA22-game-creators/cookingbomb-apiserver/test/testdata/domain/user"
 	tdString "github.com/CA22-game-creators/cookingbomb-apiserver/test/testdata/string/common"
@@ -32,7 +32,7 @@ func TestNewID(t *testing.T) {
 			title:     "【異常系】ULIDがzero値",
 			input:     ulid.ULID{},
 			expected1: user.ID{},
-			expected2: errors.New("user id is nil"),
+			expected2: errors.Internal("user id is nil"),
 		},
 	}
 
