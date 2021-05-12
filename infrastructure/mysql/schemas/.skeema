@@ -1,6 +1,6 @@
 default-character-set=utf8mb4
 default-collation=utf8mb4_bin
-generator=skeema:1.5.0-community
+generator=skeema:1.5.1-community
 schema=cooking_bomb
 
 [local]
