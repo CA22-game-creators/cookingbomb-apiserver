@@ -14,25 +14,36 @@ Docker を[ここ](https://www.docker.com/get-started)からインストール
 $ make run
 ```
 
-## go.mod とは別に インストールが必要な Go ライブラリ
+## CLI で用いる Go ライブラリ
+
+`tools/tools.go`を参照
 
 ### wire
 
 - 依存性注入(DI)ツール
-- [インストール](https://github.com/google/wire)
+
+```
+$ go install github.com/google/wire/cmd/wire
+```
 
 ### Skeema
 
 - マイグレーションツール
-- [インストール](https://www.skeema.io/download/)
 
-### grpc_cli
-
-- CLI で gRPC のリクエストができる
-- [インストール](https://qiita.com/jackchuka/items/2072191efccec8a2d859)
+```
+$ go install github.com/skeema/skeema
+```
 
 ### golangci-lint
 
 - コードの静的解析を行う
 - Go の Linter 詰め合わせ
-- [インストール](https://golangci-lint.run/usage/install/#local-installation)
+
+```
+$ go install github.com/golangci/golangci-lint/cmd/golangci-lint
+```
+
+### grpc_cli（任意）
+
+- CLI で gRPC のリクエストができる
+- [インストール](https://qiita.com/jackchuka/items/2072191efccec8a2d859)
