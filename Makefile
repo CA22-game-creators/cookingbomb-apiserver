@@ -15,7 +15,7 @@ migrate:
 .PHONY: lint
 lint:
 	go mod tidy
-	golangci-lint run --enable=golint,gosec,prealloc,gocognit
+	golangci-lint run --enable=gosec,prealloc,gocognit
 
 .PHONY: test
 test:
