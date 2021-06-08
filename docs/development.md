@@ -47,3 +47,4 @@ $ go install github.com/golangci/golangci-lint/cmd/golangci-lint
 
 - CLI で gRPC のリクエストができる
 - [インストール](https://qiita.com/jackchuka/items/2072191efccec8a2d859)
+- [公式のインストールマニュアル](https://github.com/grpc/grpc/blob/master/doc/command_line_tool.md)
