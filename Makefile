@@ -23,4 +23,5 @@ test:
 
 .PHONY: generate
 generate:
+	rm -rf mock/
 	go generate ./...

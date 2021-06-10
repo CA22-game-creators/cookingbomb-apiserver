@@ -6,18 +6,23 @@
 package account
 
 import (
-	"github.com/CA22-game-creators/cookingbomb-apiserver/application/account/signup"
+	auth2 "github.com/CA22-game-creators/cookingbomb-apiserver/application/common/auth/authenticate"
+	account4 "github.com/CA22-game-creators/cookingbomb-apiserver/application/usecase/account/get_account_info"
+	account3 "github.com/CA22-game-creators/cookingbomb-apiserver/application/usecase/account/refresh_session_token"
+	"github.com/CA22-game-creators/cookingbomb-apiserver/application/usecase/account/signup"
 	"github.com/CA22-game-creators/cookingbomb-apiserver/domain/model/user"
+	"github.com/CA22-game-creators/cookingbomb-apiserver/infrastructure/application/common/auth/authenticate/account_id_fetcher"
+	account2 "github.com/CA22-game-creators/cookingbomb-apiserver/infrastructure/application/usecase/account/refresh_session_token/session_token_refresher"
 	"github.com/CA22-game-creators/cookingbomb-apiserver/infrastructure/mysql"
 	user2 "github.com/CA22-game-creators/cookingbomb-apiserver/infrastructure/repository/user"
-	account2 "github.com/CA22-game-creators/cookingbomb-apiserver/presentation/account"
+	account5 "github.com/CA22-game-creators/cookingbomb-apiserver/presentation/account"
 	"github.com/CA22-game-creators/cookingbomb-apiserver/util"
-	"github.com/CA22-game-creators/cookingbomb-proto/server/pb"
+	"github.com/CA22-game-creators/cookingbomb-proto/server/pb/api"
 )
 
 // Injectors from wire.go:
 
-func DI() proto.AccountServicesServer {
+func DI() api.AccountServicesServer {
 	idGenerator := util.NewIDGenerator()
 	tokenGenerator := util.NewTokenGenerator()
 	cryptoManager := util.NewCryptManager()
@@ -25,6 +30,11 @@ func DI() proto.AccountServicesServer {
 	db := mysql.NewDB()
 	repository := user2.NewRepository(db)
 	inputPort := account.New(factory, repository)
-	accountServicesServer := account2.New(inputPort)
+	sessionTokenRefresher := account2.New(db)
+	accountInputPort := account3.New(repository, sessionTokenRefresher, tokenGenerator)
+	accountIDFetcher := auth.New(db)
+	authInputPort := auth2.New(repository, accountIDFetcher)
+	inputPort2 := account4.New(authInputPort)
+	accountServicesServer := account5.New(inputPort, accountInputPort, inputPort2)
 	return accountServicesServer
 }
