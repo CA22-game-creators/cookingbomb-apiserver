@@ -18,5 +18,8 @@ func NewCryptManager() CryptoManager {
 
 func (cryptoManager) Encrypt(v string) ([]byte, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(v), bcrypt.DefaultCost)
-	return hash, errors.Internal(err.Error())
+	if err != nil {
+		return []byte{}, errors.Internal(err.Error())
+	}
+	return hash, nil
 }

@@ -22,5 +22,8 @@ func NewIDGenerator() IDGenerator {
 
 func (idGenerator) Generate() (ulid.ULID, error) {
 	id, err := ulid.New(ulid.Timestamp(time.Unix(1000000, 0)), rand.Reader)
-	return id, errors.Internal(err.Error())
+	if err != nil {
+		return ulid.ULID{}, errors.Internal(err.Error())
+	}
+	return id, nil
 }
