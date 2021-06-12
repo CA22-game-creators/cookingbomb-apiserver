@@ -19,5 +19,8 @@ func NewTokenGenerator() TokenGenerator {
 
 func (tokenGenerator) Generate() (uuid.UUID, error) {
 	token, err := uuid.NewRandom()
-	return token, errors.Internal(err.Error())
+	if err != nil {
+		return uuid.Nil, errors.Internal(err.Error())
+	}
+	return token, nil
 }
