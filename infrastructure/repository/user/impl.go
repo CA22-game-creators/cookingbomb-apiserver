@@ -31,7 +31,7 @@ func (r repository) Save(entity domain.User) error {
 
 func (r repository) Find(userID domain.ID) (domain.User, error) {
 	var user dbModel.User
-	if err := r.db.First(&user, ulid.ULID(userID).String()).Error; err != nil {
+	if err := r.db.Where("id = ?", ulid.ULID(userID).String()).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return domain.User{}, nil
 		}

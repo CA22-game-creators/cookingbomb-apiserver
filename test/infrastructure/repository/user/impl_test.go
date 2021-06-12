@@ -83,7 +83,7 @@ func TestFind(t *testing.T) {
 			title: "【正常系】IDからユーザーを取得",
 			before: func(h testHandler) {
 				h.sqlmock.ExpectQuery(
-					regexp.QuoteMeta("SELECT * FROM `users` WHERE `users`.`id` = ? ORDER BY `users`.`id` LIMIT 1"),
+					regexp.QuoteMeta("SELECT * FROM `users` WHERE id = ? ORDER BY `users`.`id` LIMIT 1"),
 				).WithArgs(
 					ulid.ULID(tdDomain.ID).String(),
 				).WillReturnRows(
@@ -100,7 +100,7 @@ func TestFind(t *testing.T) {
 			title: "【異常系】IDに対応するユーザーがいない",
 			before: func(h testHandler) {
 				h.sqlmock.ExpectQuery(
-					regexp.QuoteMeta("SELECT * FROM `users` WHERE `users`.`id` = ? ORDER BY `users`.`id` LIMIT 1"),
+					regexp.QuoteMeta("SELECT * FROM `users` WHERE id = ? ORDER BY `users`.`id` LIMIT 1"),
 				).WillReturnError(gorm.ErrRecordNotFound)
 			},
 			input:     tdDomain.ID,
