@@ -23,7 +23,11 @@ $ make run
 - 依存性注入(DI)ツール
 
 ```
+# install
 $ go install github.com/google/wire/cmd/wire
+
+# DI(account)
+$ wire ./di/account/wire.go
 ```
 
 ### Skeema
@@ -31,7 +35,17 @@ $ go install github.com/google/wire/cmd/wire
 - マイグレーションツール
 
 ```
+# install
 $ go install github.com/skeema/skeema
+
+# コードと DB の差分を確認する
+$ skeema diff local -ppassword
+
+# コードの情報を DB に反映する
+$ skeema push local -ppassword
+
+# DB の情報をコードに反映する
+$ skeema pull local -ppassword
 ```
 
 ### golangci-lint
@@ -40,11 +54,19 @@ $ go install github.com/skeema/skeema
 - Go の Linter 詰め合わせ
 
 ```
+# install
 $ go install github.com/golangci/golangci-lint/cmd/golangci-lint
+
+# 実行
+$ golangci-lint run
 ```
 
-### grpc_cli（任意）
+### gRPCurl
 
 - CLI で gRPC のリクエストができる
-- [インストール](https://qiita.com/jackchuka/items/2072191efccec8a2d859)
-- [公式のインストールマニュアル](https://github.com/grpc/grpc/blob/master/doc/command_line_tool.md)
+- [公式/インストール](https://github.com/fullstorydev/grpcurl)
+
+```
+# アカウント登録
+$ grpcurl -plaintext -d '{"name": "Mario"}' localhost:8080 proto.AccountServices/Signup
+```
