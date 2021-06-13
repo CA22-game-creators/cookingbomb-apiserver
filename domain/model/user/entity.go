@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/CA22-game-creators/cookingbomb-apiserver/errors"
+	"github.com/oklog/ulid/v2"
 )
 
 type User struct {
@@ -22,4 +23,12 @@ func New(id ID, name Name, hashedAuthToken HashedAuthToken) (User, error) {
 	}
 
 	return User{id, name, hashedAuthToken}, nil
+}
+
+func FromRepository(id, name, hashedAuthToken string) User {
+	return User{
+		ID:              ID(ulid.MustParse(id)),
+		Name:            Name(name),
+		HashedAuthToken: HashedAuthToken(hashedAuthToken),
+	}
 }

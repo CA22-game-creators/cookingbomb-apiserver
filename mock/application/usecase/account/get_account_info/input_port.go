@@ -7,7 +7,7 @@ package mock_account
 import (
 	reflect "reflect"
 
-	account "github.com/CA22-game-creators/cookingbomb-apiserver/application/account/signup"
+	account "github.com/CA22-game-creators/cookingbomb-apiserver/application/usecase/account/get_account_info"
 	gomock "github.com/golang/mock/gomock"
 )
 

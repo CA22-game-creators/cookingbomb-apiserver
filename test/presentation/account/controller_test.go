@@ -4,15 +4,19 @@ import (
 	"context"
 	"testing"
 
-	pb "github.com/CA22-game-creators/cookingbomb-proto/server/pb"
+	pb "github.com/CA22-game-creators/cookingbomb-proto/server/pb/api"
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 
-	signupApplication "github.com/CA22-game-creators/cookingbomb-apiserver/application/account/signup"
+	getAccountInfo "github.com/CA22-game-creators/cookingbomb-apiserver/application/usecase/account/get_account_info"
+	refreshSessionToken "github.com/CA22-game-creators/cookingbomb-apiserver/application/usecase/account/refresh_session_token"
+	signup "github.com/CA22-game-creators/cookingbomb-apiserver/application/usecase/account/signup"
 	controller "github.com/CA22-game-creators/cookingbomb-apiserver/presentation/account"
 
-	mockSignupApplication "github.com/CA22-game-creators/cookingbomb-apiserver/mock/application/account/signup"
+	mockGetAccountInfo "github.com/CA22-game-creators/cookingbomb-apiserver/mock/application/usecase/account/get_account_info"
+	mockRefreshSessionToken "github.com/CA22-game-creators/cookingbomb-apiserver/mock/application/usecase/account/refresh_session_token"
+	mockSignup "github.com/CA22-game-creators/cookingbomb-apiserver/mock/application/usecase/account/signup"
 	tdDomain "github.com/CA22-game-creators/cookingbomb-apiserver/test/testdata/domain/user"
 	tdCommonString "github.com/CA22-game-creators/cookingbomb-apiserver/test/testdata/string/common"
 	tdUserString "github.com/CA22-game-creators/cookingbomb-apiserver/test/testdata/string/user"
@@ -21,11 +25,13 @@ import (
 type testHandler struct {
 	controller pb.AccountServicesServer
 
-	context           context.Context
-	signupApplication *mockSignupApplication.MockInputPort
+	context             context.Context
+	signup              *mockSignup.MockInputPort
+	refreshSessionToken *mockRefreshSessionToken.MockInputPort
+	getAccountInfo      *mockGetAccountInfo.MockInputPort
 }
 
-func TestCreate(t *testing.T) {
+func TestSignup(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -38,20 +44,20 @@ func TestCreate(t *testing.T) {
 		{
 			title: "【正常系】ユーザーを登録する",
 			before: func(h testHandler) {
-				input := signupApplication.InputData{Name: tdUserString.Name.Valid}
-				output := signupApplication.OutputData{
+				input := signup.InputData{Name: tdUserString.Name.Valid}
+				output := signup.OutputData{
 					Account:   tdDomain.Entity,
 					AuthToken: uuid.MustParse(tdCommonString.UUID.Valid),
 				}
-				h.signupApplication.EXPECT().Handle(input).Return(output)
+				h.signup.EXPECT().Handle(input).Return(output)
 			},
 			input: &pb.SignupRequest{Name: tdUserString.Name.Valid},
 			expected1: &pb.SignupResponse{
-				Account: &pb.Account{
-					Id:        tdCommonString.ULID.Valid,
-					Name:      tdUserString.Name.Valid,
-					AuthToken: tdCommonString.UUID.Valid,
+				AccountInfo: &pb.AccountInfo{
+					Id:   tdCommonString.ULID.Valid,
+					Name: tdUserString.Name.Valid,
 				},
+				AuthToken: tdCommonString.UUID.Valid,
 			},
 			expected2: nil,
 		},
@@ -60,7 +66,7 @@ func TestCreate(t *testing.T) {
 	for _, td := range tests {
 		td := td
 
-		t.Run("Handle:"+td.title, func(t *testing.T) {
+		t.Run("Signup:"+td.title, func(t *testing.T) {
 			t.Parallel()
 
 			var tester testHandler
@@ -75,11 +81,109 @@ func TestCreate(t *testing.T) {
 	}
 }
 
+func TestGetAccountInfo(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		title     string
+		before    func(testHandler)
+		input     *pb.GetAccountInfoRequest
+		expected1 *pb.GetAccountInfoResponse
+		expected2 error
+	}{
+		{
+			title: "【正常系】sessionTokenからアカウント情報を取得できる",
+			before: func(h testHandler) {
+				input := getAccountInfo.InputData{SessionToken: tdCommonString.UUID.Valid}
+				output := getAccountInfo.OutputData{Account: tdDomain.Entity}
+				h.getAccountInfo.EXPECT().Handle(input).Return(output)
+			},
+			input: &pb.GetAccountInfoRequest{
+				SessionToken: tdCommonString.UUID.Valid,
+			},
+			expected1: &pb.GetAccountInfoResponse{
+				AccountInfo: &pb.AccountInfo{
+					Id:   tdCommonString.ULID.Valid,
+					Name: tdUserString.Name.Valid,
+				},
+			},
+			expected2: nil,
+		},
+	}
+
+	for _, td := range tests {
+		td := td
+
+		t.Run("GetAccountInfo:"+td.title, func(t *testing.T) {
+			t.Parallel()
+
+			var tester testHandler
+			tester.setupTest(t)
+			td.before(tester)
+
+			output1, output2 := tester.controller.GetAccountInfo(tester.context, td.input)
+
+			assert.Equal(t, td.expected1, output1)
+			assert.Equal(t, td.expected2, output2)
+		})
+	}
+}
+func TestGetSessionToken(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		title     string
+		before    func(testHandler)
+		input     *pb.GetSessionTokenRequest
+		expected1 *pb.GetSessionTokenResponse
+		expected2 error
+	}{
+		{
+			title: "【正常系】UserIDとAuthTokenからSessionTokenを取得できる",
+			before: func(h testHandler) {
+				input := refreshSessionToken.InputData{
+					UserID:    tdCommonString.ULID.Valid,
+					AuthToken: tdCommonString.UUID.Valid,
+				}
+				output := refreshSessionToken.OutputData{SessionToken: uuid.MustParse(tdCommonString.UUID.Valid)}
+				h.refreshSessionToken.EXPECT().Handle(input).Return(output)
+			},
+			input: &pb.GetSessionTokenRequest{
+				UserId:    tdCommonString.ULID.Valid,
+				AuthToken: tdCommonString.UUID.Valid,
+			},
+			expected1: &pb.GetSessionTokenResponse{
+				SessionToken: tdCommonString.UUID.Valid,
+			},
+			expected2: nil,
+		},
+	}
+
+	for _, td := range tests {
+		td := td
+
+		t.Run("GetSessionToken:"+td.title, func(t *testing.T) {
+			t.Parallel()
+
+			var tester testHandler
+			tester.setupTest(t)
+			td.before(tester)
+
+			output1, output2 := tester.controller.GetSessionToken(tester.context, td.input)
+
+			assert.Equal(t, td.expected1, output1)
+			assert.Equal(t, td.expected2, output2)
+		})
+	}
+}
+
 func (h *testHandler) setupTest(t *testing.T) {
 	h.context = context.TODO()
 
 	ctrl := gomock.NewController(t)
-	h.signupApplication = mockSignupApplication.NewMockInputPort(ctrl)
+	h.signup = mockSignup.NewMockInputPort(ctrl)
+	h.refreshSessionToken = mockRefreshSessionToken.NewMockInputPort(ctrl)
+	h.getAccountInfo = mockGetAccountInfo.NewMockInputPort(ctrl)
 
-	h.controller = controller.New(h.signupApplication)
+	h.controller = controller.New(h.signup, h.refreshSessionToken, h.getAccountInfo)
 }

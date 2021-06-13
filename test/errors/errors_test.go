@@ -38,6 +38,34 @@ func TestInvalidArgument(t *testing.T) {
 	}
 }
 
+func TestUnauthenticated(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		title    string
+		input    string
+		expected error
+	}{
+		{
+			title:    "【正常系】認証エラー(Unauthorized)を作成できる",
+			input:    "error",
+			expected: status.Error(codes.Unauthenticated, "error"),
+		},
+	}
+
+	for _, td := range tests {
+		td := td
+
+		t.Run("Unauthenticated:"+td.title, func(t *testing.T) {
+			t.Parallel()
+
+			output := errors.Unauthenticated(td.input)
+
+			assert.Equal(t, td.expected, output)
+		})
+	}
+}
+
 func TestInternal(t *testing.T) {
 	t.Parallel()
 

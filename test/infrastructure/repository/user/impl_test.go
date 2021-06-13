@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/oklog/ulid/v2"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -64,6 +65,64 @@ func TestSave(t *testing.T) {
 			output := tester.repository.Save(td.input)
 
 			assert.Equal(t, td.expected, output)
+		})
+	}
+}
+
+func TestFind(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		title     string
+		before    func(testHandler)
+		input     domain.ID
+		expected1 domain.User
+		expected2 error
+	}{
+		{
+			title: "【正常系】IDからユーザーを取得",
+			before: func(h testHandler) {
+				h.sqlmock.ExpectQuery(
+					regexp.QuoteMeta("SELECT * FROM `users` WHERE id = ? ORDER BY `users`.`id` LIMIT 1"),
+				).WithArgs(
+					ulid.ULID(tdDomain.ID).String(),
+				).WillReturnRows(
+					sqlmock.NewRows(
+						[]string{"id", "name", "hashed_auth_token"},
+					).AddRow(ulid.ULID(tdDomain.ID).String(), string(tdDomain.Name), string(tdDomain.HashedAuthToken)),
+				)
+			},
+			input:     tdDomain.ID,
+			expected1: tdDomain.Entity,
+			expected2: nil,
+		},
+		{
+			title: "【異常系】IDに対応するユーザーがいない",
+			before: func(h testHandler) {
+				h.sqlmock.ExpectQuery(
+					regexp.QuoteMeta("SELECT * FROM `users` WHERE id = ? ORDER BY `users`.`id` LIMIT 1"),
+				).WillReturnError(gorm.ErrRecordNotFound)
+			},
+			input:     tdDomain.ID,
+			expected1: domain.User{},
+			expected2: nil,
+		},
+	}
+
+	for _, td := range tests {
+		td := td
+
+		t.Run("Find:"+td.title, func(t *testing.T) {
+			t.Parallel()
+
+			var tester testHandler
+			tester.setupTest(t)
+			td.before(tester)
+
+			output1, output2 := tester.repository.Find(td.input)
+
+			assert.Equal(t, td.expected1, output1)
+			assert.Equal(t, td.expected2, output2)
 		})
 	}
 }
