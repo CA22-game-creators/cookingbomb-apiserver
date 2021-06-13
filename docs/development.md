@@ -43,6 +43,14 @@ $ go install github.com/skeema/skeema
 $ go install github.com/golangci/golangci-lint/cmd/golangci-lint
 ```
 
+## mockgen
+
+- DI する処理をモックできる
+
+```
+$ go install github.com/golang/mock/mockgen
+```
+
 ### grpc_cli（任意）
 
 - CLI で gRPC のリクエストができる

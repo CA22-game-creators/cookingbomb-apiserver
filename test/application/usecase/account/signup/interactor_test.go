@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 
-	application "github.com/CA22-game-creators/cookingbomb-apiserver/application/account/signup"
+	application "github.com/CA22-game-creators/cookingbomb-apiserver/application/usecase/account/signup"
 
 	mockDomain "github.com/CA22-game-creators/cookingbomb-apiserver/mock/domain/model/user"
 	tdDomain "github.com/CA22-game-creators/cookingbomb-apiserver/test/testdata/domain/user"
@@ -22,7 +22,7 @@ type testHandler struct {
 	repository *mockDomain.MockRepository
 }
 
-func TestCreate(t *testing.T) {
+func TestHandle(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -41,7 +41,9 @@ func TestCreate(t *testing.T) {
 				)
 				h.repository.EXPECT().Save(tdDomain.Entity).Return(nil)
 			},
-			input: application.InputData{Name: tdUserString.Name.Valid},
+			input: application.InputData{
+				Name: tdUserString.Name.Valid,
+			},
 			expected: application.OutputData{
 				Account:   tdDomain.Entity,
 				AuthToken: uuid.MustParse(tdCommonString.UUID.Valid),

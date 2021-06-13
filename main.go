@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	pb "github.com/CA22-game-creators/cookingbomb-proto/server/pb"
+	pb "github.com/CA22-game-creators/cookingbomb-proto/server/pb/api"
 
 	accountDI "github.com/CA22-game-creators/cookingbomb-apiserver/di/account"
 )

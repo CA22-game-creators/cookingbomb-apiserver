@@ -3,4 +3,5 @@ package user
 
 type Repository interface {
 	Save(User) error
+	Find(ID) (User, error)
 }

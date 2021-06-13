@@ -4,6 +4,8 @@ left to right direction
 actor ユーザーアカウント
 rectangle {
     ユーザーアカウント -- (登録する)
+    ユーザーアカウント -- (アカウント情報を取得する)
+    ユーザーアカウント -- (Sessionを再取得する)
 }
 
 @enduml
