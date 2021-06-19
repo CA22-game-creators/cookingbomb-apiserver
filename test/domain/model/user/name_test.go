@@ -1,7 +1,6 @@
 package user_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -29,26 +28,28 @@ func TestNewName(t *testing.T) {
 			expected2: nil,
 		},
 		{
-			title:     "【異常系】ユーザー名がUTF-8でエンコードされた文字列ではない",
+			title:     "【異常系】ユーザー名が予定されていない文字列",
 			input:     tdString.Name.Invalid,
 			expected1: "",
-			expected2: errors.InvalidArgument("user name string is invalid"),
+			expected2: errors.InvalidArgument("ユーザー名は半角英数字か日本語の1-10文字である必要があります"),
+		},
+		{
+			title:     "【異常系】ユーザー名が不正文字コード",
+			input:     tdString.Name.InvalidChar,
+			expected1: "",
+			expected2: errors.InvalidArgument("ユーザー名は半角英数字か日本語の1-10文字である必要があります"),
 		},
 		{
 			title:     "【異常系】ユーザー名が長すぎる",
 			input:     tdString.Name.TooLong,
 			expected1: "",
-			expected2: errors.InvalidArgument(
-				fmt.Sprintf("user name should be %d to %d characters", user.NameMinLen, user.NameMaxLen),
-			),
+			expected2: errors.InvalidArgument("ユーザー名は半角英数字か日本語の1-10文字である必要があります"),
 		},
 		{
 			title:     "【異常系】ユーザー名が短すぎる",
 			input:     tdString.Name.TooShort,
 			expected1: "",
-			expected2: errors.InvalidArgument(
-				fmt.Sprintf("user name should be %d to %d characters", user.NameMinLen, user.NameMaxLen),
-			),
+			expected2: errors.InvalidArgument("ユーザー名は半角英数字か日本語の1-10文字である必要があります"),
 		},
 	}
 
