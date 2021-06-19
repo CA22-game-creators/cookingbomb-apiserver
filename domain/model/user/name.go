@@ -9,7 +9,7 @@ import (
 type Name string
 
 func NewName(v string) (Name, error) {
-	isValid, err := regexp.MatchString("^([0-9０-９a-zA-Zぁ-んァ-ヶｱ-ﾝﾞﾟ一-龠]{1,10})$", v)
+	isValid, err := regexp.MatchString("^([0-9０-９a-zA-Zぁ-んァ-ヶｦ-ﾟ一-龠]{1,10})$", v)
 	if err != nil {
 		return "", errors.Internal(err.Error())
 	}
