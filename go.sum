@@ -42,8 +42,8 @@ github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78/go.mod h1:LmzpDX
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/CA22-game-creators/cookingbomb-proto v0.1.9 h1:zRgQbEGfUVl7P8SlYeNgl++2P7ZHsq4Yg5uW/7rWGFQ=
-github.com/CA22-game-creators/cookingbomb-proto v0.1.9/go.mod h1:VaFJFX7sHbIck8b4b2k8wCg75uyvXJ8+GrybhAfG1RM=
+github.com/CA22-game-creators/cookingbomb-proto v0.1.10 h1:al6XosYwiQt7I7UuVZzxMAeM/Bb67Hi4A8OAMUeSU2M=
+github.com/CA22-game-creators/cookingbomb-proto v0.1.10/go.mod h1:Z1YR2OqCa/nbCdSdAYurz3XYZeh8zGicpk2J2RyHfyo=
 github.com/DATA-DOG/go-sqlmock v1.5.0 h1:Shsta01QNfFxHCfpW6YH2STWB0MudeXXEWMr20OEh60=
 github.com/DATA-DOG/go-sqlmock v1.5.0/go.mod h1:f/Ixk793poVmq4qj/V1dPUg2JEAKC73Q5eFN3EC/SaM=
 github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24 h1:sHglBQTwgx+rWPdisA5ynNEsoARbiCBOyGcJM4/OzsM=

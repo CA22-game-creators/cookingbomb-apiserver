@@ -4,6 +4,7 @@ import (
 	"context"
 
 	pb "github.com/CA22-game-creators/cookingbomb-proto/server/pb/api"
+	validator "github.com/CA22-game-creators/cookingbomb-proto/server/validation"
 	"github.com/oklog/ulid/v2"
 
 	getAccountInfo "github.com/CA22-game-creators/cookingbomb-apiserver/application/usecase/account/get_account_info"
@@ -26,8 +27,11 @@ func New(su signup.InputPort, gs refreshSessionToken.InputPort, ga getAccountInf
 }
 
 func (c controller) Signup(ctx context.Context, request *pb.SignupRequest) (*pb.SignupResponse, error) {
-	input := signup.InputData{Name: request.Name}
+	if err := validator.Validate(request); err != nil {
+		return nil, err
+	}
 
+	input := signup.InputData{Name: request.Name}
 	output := c.signup.Handle(input)
 	if output.Err != nil {
 		return nil, output.Err
@@ -43,8 +47,11 @@ func (c controller) Signup(ctx context.Context, request *pb.SignupRequest) (*pb.
 }
 
 func (c controller) GetSessionToken(ctx context.Context, request *pb.GetSessionTokenRequest) (*pb.GetSessionTokenResponse, error) {
-	input := refreshSessionToken.InputData{UserID: request.UserId, AuthToken: request.AuthToken}
+	if err := validator.Validate(request); err != nil {
+		return nil, err
+	}
 
+	input := refreshSessionToken.InputData{UserID: request.UserId, AuthToken: request.AuthToken}
 	output := c.refreshSessionToken.Handle(input)
 	if output.Err != nil {
 		return nil, output.Err
@@ -56,8 +63,11 @@ func (c controller) GetSessionToken(ctx context.Context, request *pb.GetSessionT
 }
 
 func (c controller) GetAccountInfo(ctx context.Context, request *pb.GetAccountInfoRequest) (*pb.GetAccountInfoResponse, error) {
-	input := getAccountInfo.InputData{SessionToken: request.SessionToken}
+	if err := validator.Validate(request); err != nil {
+		return nil, err
+	}
 
+	input := getAccountInfo.InputData{SessionToken: request.SessionToken}
 	output := c.getAccountInfo.Handle(input)
 	if output.Err != nil {
 		return nil, output.Err

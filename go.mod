@@ -3,7 +3,7 @@ module github.com/CA22-game-creators/cookingbomb-apiserver
 go 1.16
 
 require (
-	github.com/CA22-game-creators/cookingbomb-proto v0.1.9
+	github.com/CA22-game-creators/cookingbomb-proto v0.1.10
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/golang/mock v1.4.4
 	github.com/golangci/golangci-lint v1.40.1

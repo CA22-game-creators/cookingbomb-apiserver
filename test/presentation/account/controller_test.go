@@ -8,6 +8,8 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	getAccountInfo "github.com/CA22-game-creators/cookingbomb-apiserver/application/usecase/account/get_account_info"
 	refreshSessionToken "github.com/CA22-game-creators/cookingbomb-apiserver/application/usecase/account/refresh_session_token"
@@ -61,6 +63,30 @@ func TestSignup(t *testing.T) {
 			},
 			expected2: nil,
 		},
+		{
+			title:     "【異常系】ユーザー名が短すぎる",
+			input:     &pb.SignupRequest{Name: tdUserString.Name.TooShort},
+			expected1: nil,
+			expected2: status.Error(codes.InvalidArgument, "ユーザー名は半角英数字か日本語の1-10文字である必要があります"),
+		},
+		{
+			title:     "【異常系】ユーザー名が長すぎる",
+			input:     &pb.SignupRequest{Name: tdUserString.Name.TooLong},
+			expected1: nil,
+			expected2: status.Error(codes.InvalidArgument, "ユーザー名は半角英数字か日本語の1-10文字である必要があります"),
+		},
+		{
+			title:     "【異常系】ユーザー名が不正な文字コード",
+			input:     &pb.SignupRequest{Name: tdUserString.Name.InvalidChar},
+			expected1: nil,
+			expected2: status.Error(codes.InvalidArgument, "ユーザー名は半角英数字か日本語の1-10文字である必要があります"),
+		},
+		{
+			title:     "【異常系】ユーザー名に記号とか入ってる",
+			input:     &pb.SignupRequest{Name: tdUserString.Name.Invalid},
+			expected1: nil,
+			expected2: status.Error(codes.InvalidArgument, "ユーザー名は半角英数字か日本語の1-10文字である必要があります"),
+		},
 	}
 
 	for _, td := range tests {
@@ -71,7 +97,9 @@ func TestSignup(t *testing.T) {
 
 			var tester testHandler
 			tester.setupTest(t)
-			td.before(tester)
+			if td.before != nil {
+				td.before(tester)
+			}
 
 			output1, output2 := tester.controller.Signup(tester.context, td.input)
 
@@ -109,6 +137,14 @@ func TestGetAccountInfo(t *testing.T) {
 			},
 			expected2: nil,
 		},
+		{
+			title: "【異常系】sessionTokenが不正値",
+			input: &pb.GetAccountInfoRequest{
+				SessionToken: tdCommonString.UUID.Invalid,
+			},
+			expected1: nil,
+			expected2: status.Error(codes.InvalidArgument, "sessionTokenが不正な形式です"),
+		},
 	}
 
 	for _, td := range tests {
@@ -119,7 +155,9 @@ func TestGetAccountInfo(t *testing.T) {
 
 			var tester testHandler
 			tester.setupTest(t)
-			td.before(tester)
+			if td.before != nil {
+				td.before(tester)
+			}
 
 			output1, output2 := tester.controller.GetAccountInfo(tester.context, td.input)
 
@@ -157,6 +195,33 @@ func TestGetSessionToken(t *testing.T) {
 			},
 			expected2: nil,
 		},
+		{
+			title: "【異常系】userIDが不正値",
+			input: &pb.GetSessionTokenRequest{
+				UserId:    tdCommonString.ULID.Invalid,
+				AuthToken: tdCommonString.UUID.Valid,
+			},
+			expected1: nil,
+			expected2: status.Error(codes.InvalidArgument, "ユーザーIDが不正な形式です"),
+		},
+		{
+			title: "【異常系】authTokenが不正値",
+			input: &pb.GetSessionTokenRequest{
+				UserId:    tdCommonString.ULID.Valid,
+				AuthToken: tdCommonString.UUID.Invalid,
+			},
+			expected1: nil,
+			expected2: status.Error(codes.InvalidArgument, "authTokenが不正な形式です"),
+		},
+		{
+			title: "【異常系】userIDもauthTokenも不正値",
+			input: &pb.GetSessionTokenRequest{
+				UserId:    tdCommonString.ULID.Invalid,
+				AuthToken: tdCommonString.UUID.Invalid,
+			},
+			expected1: nil,
+			expected2: status.Error(codes.InvalidArgument, "ユーザーIDが不正な形式です\nauthTokenが不正な形式です"),
+		},
 	}
 
 	for _, td := range tests {
@@ -167,7 +232,9 @@ func TestGetSessionToken(t *testing.T) {
 
 			var tester testHandler
 			tester.setupTest(t)
-			td.before(tester)
+			if td.before != nil {
+				td.before(tester)
+			}
 
 			output1, output2 := tester.controller.GetSessionToken(tester.context, td.input)
 
