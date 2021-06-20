@@ -20,6 +20,8 @@ services:
       - "8080:8080"
     depends_on:
       - mysql
+    networks: 
+      - "shared-local"
 
   mysql:
     image: mysql:8.0
@@ -34,3 +36,9 @@ services:
     restart: always
     ports:
       - "13306:3306"
+    networks:
+      - "shared-local"
+
+networks: 
+  shared-local:
+    external: true
