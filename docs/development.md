@@ -8,6 +8,14 @@
 
 Docker を[ここ](https://www.docker.com/get-started)からインストール
 
+## 環境準備
+
+各環境ごとに、一度のみ実行する必要があります。
+
+```
+make build-env
+```
+
 ## アプリケーションの実行
 
 ```
