@@ -25,3 +25,7 @@ test:
 generate:
 	rm -rf mock/
 	go generate ./...
+
+.PHONY: build-env
+build-env:
+	if [ `docker network ls | grep shared-local |wc -l` -eq 0 ]; then docker network create shared-local; fi
