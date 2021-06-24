@@ -9,9 +9,12 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . ./
-RUN go build .
+RUN go build -o app
 
 RUN go get github.com/pilu/fresh
+
+RUN adduser -D myuser && chown -R myuser ./app
+USER myuser
 
 EXPOSE 8080
 CMD ["fresh"]
