@@ -1,0 +1,47 @@
+name: Build and Publish Docker
+
+on:
+  push:
+    branches:
+      - master
+env:
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+  GOOGLE_PROJECT_NAME: ${{ secrets.GOOGLE_PROJECT_NAME }}
+  APP_NAME: app
+
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Go 1.16
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.29
+          args: --enable=gosec,prealloc,gocognit
+
+      - name: Run test
+        run: make test
+
+      - name: GCP Authenticate
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          export_default_credentials: true
+
+      - name: Configure docker to use the gcloud cli
+        run: gcloud auth configure-docker --quiet
+
+      - name: Build a docker image
+        run: docker build -t gcr.io/$GOOGLE_PROJECT_NAME/$APP_NAME:latest -f ./docker/app/prod/Dockerfile .
+
+      - name: Push the docker image
+        run: docker push gcr.io/$GOOGLE_PROJECT_NAME/$APP_NAME:latest
+
+
