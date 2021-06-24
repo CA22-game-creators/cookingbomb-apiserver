@@ -1,11 +1,11 @@
-name: Build and Publish Docker
+name: CD
 
 on:
   push:
     branches:
-      - master
+      - main
 env:
-  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
   GOOGLE_PROJECT_NAME: ${{ secrets.GOOGLE_PROJECT_NAME }}
   APP_NAME: app
 
@@ -31,9 +31,10 @@ jobs:
         run: make test
 
       - name: GCP Authenticate
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@master
         with:
-          export_default_credentials: true
+          project_id: ${{ secrets.GOOGLE_PROJECT_NAME }}
+          service_account_key: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Configure docker to use the gcloud cli
         run: gcloud auth configure-docker --quiet
