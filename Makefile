@@ -2,11 +2,9 @@ ENV_LOCAL = $(shell cat env.local)
 
 .PHONY: run
 run:
+	if [ `docker network ls | grep shared-local |wc -l` -eq 0 ]; then docker network create shared-local; fi
 	$(ENV_LOCAL) docker-compose up
 
-.PHONY: re-run
-re-run:
-	$(ENV_LOCAL) docker-compose up --build
 
 .PHONY: migrate
 migrate:
@@ -25,7 +23,3 @@ test:
 generate:
 	rm -rf mock/
 	go generate ./...
-
-.PHONY: build-env
-build-env:
-	if [ `docker network ls | grep shared-local |wc -l` -eq 0 ]; then docker network create shared-local; fi
