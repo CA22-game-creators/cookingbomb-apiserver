@@ -15,8 +15,8 @@ FROM alpine:3.13
 WORKDIR /root/
 COPY --from=builder /go/src/github.com/CA22-game-creators/cookingbomb-apiserver .
 
-RUN adduser -D myuser && chown -R myuser ./app
-USER myuser
+# RUN adduser -D myuser && chown -R myuser ./app
+# USER myuser
 
 EXPOSE 8080
 ENTRYPOINT ["./app"]
