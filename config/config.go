@@ -21,6 +21,11 @@ func DSN() string {
 		) + "?parseTime=true&collation=utf8mb4_bin"
 	}
 
-	// TODO DSN to CloudSQL
-	return ""
+	return fmt.Sprintf(
+		"%s:%s@unix(/cloudsql/%s)/%s",
+		os.Getenv("MYSQL_USER"),
+		os.Getenv("MYSQL_PASSWORD"),
+		os.Getenv("MYSQL_CONNECTION_NAME"),
+		os.Getenv("MYSQL_DATABASE"),
+	) + "?parseTime=true&collation=utf8mb4_bin"
 }
