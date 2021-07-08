@@ -45,4 +45,13 @@ jobs:
       - name: Push the docker image
         run: docker push gcr.io/$GOOGLE_PROJECT_NAME/$APP_NAME:latest
 
+      - name: Deploy a Cloud Run service
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v0.6.0
+        with:
+          image: gcr.io/${{ env.GOOGLE_PROJECT_NAME }}/${{ env.APP_NAME }}:latest
+          region: us-west1
+          service: cookingbomb-srv
 
+      - name: Show deployed URL
+        run: curl "${{ steps.deploy.outputs.url }}"
