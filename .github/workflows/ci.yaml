@@ -10,19 +10,19 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-    - name: Set up Go 1.16
-      uses: actions/setup-go@v2
-      with:
-        go-version: 1.16
-
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Run golangci-lint
-      uses: golangci/golangci-lint-action@v2
+    - name: Set up Go 1.17
+      uses: actions/setup-go@v2
       with:
-        version: v1.29
-        args: --enable=gosec,prealloc,gocognit
+        go-version: 1.17
+
+    - name: Go mod download
+      run: go mod download
+
+    - name: Run golangci-lint
+      run: golangci-lint run --enable=gosec,prealloc,gocognit
 
     - name: Run test
       run: make test
